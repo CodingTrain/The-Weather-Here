@@ -13,17 +13,22 @@ if ('geolocation' in navigator) {
       const response = await fetch(api_url);
       const json = await response.json();
       weather = json.weather.currently;
-      air = json.air_quality.results[0].measurements[0];
+      console.log(weather);
+      console.log(weather.temperature);
       document.getElementById('summary').textContent = weather.summary;
       document.getElementById('temp').textContent = weather.temperature;
-      document.getElementById('aq_parameter').textContent = air.parameter;
-      document.getElementById('aq_value').textContent = air.value;
-      document.getElementById('aq_units').textContent = air.unit;
-      document.getElementById('aq_date').textContent = air.lastUpdated;
+      air = json.air_quality.results[0];
+      console.log(air);
+      document.getElementById('aq_city').textContent = air.city;
+      document.getElementById('aq_location').textContent = air.location;
+      document.getElementById('aq_parameter').textContent = air.measurements[0].parameter;
+      document.getElementById('aq_value').textContent = air.measurements[0].value;
+      document.getElementById('aq_units').textContent = air.measurements[0].unit;
+      document.getElementById('aq_date').textContent = air.measurements[0].lastUpdated;
     } catch (error) {
       console.error(error);
       air = { value: -1 };
-      document.getElementById('aq_value').textContent = 'NO READING';
+      document.getElementById('air').textContent = 'No air quality reading was found.';
     }
 
     const data = { lat, lon, weather, air };
