@@ -14,22 +14,26 @@ async function getData() {
   const pointList = [];
 
   for (item of data) {
-    pointList.push([item.lat, item.lon]);
-    console.log(item);
-    const marker = L.marker([item.lat, item.lon]).addTo(mymap);
-    let txt = `I'm sitting out here at ${item.lat}&deg;,  ${item.lon}&deg;, on
-    this ${item.weather.summary} day and it feels like ${item.weather.temperature}&deg; outside.`;
-    if (item.air.value < 0) {
-      txt += '  No air quality reading.';
-    } else {
-      txt += `  
-      The concentration of small carcinogenic particles (${item.air.measurements[0].parameter}) I'm
-        breathing in is  ${item.air.measurements[0].value} ${
-        item.air.measurements[0].unit
-      } measured from
-       ${item.air.city} at ${item.air.location} on ${item.air.measurements[0].lastUpdated}.`;
+    try{
+      pointList.push([item.lat, item.lon]);
+      console.log(item);
+      const marker = L.marker([item.lat, item.lon]).addTo(mymap);
+      let txt = `I'm sitting out here at ${item.lat}&deg;,  ${item.lon}&deg;, on
+      this ${item.weather.summary} day and it feels like ${item.weather.temperature}&deg; outside.`;
+      if (item.air.value < 0) {
+        txt += '  No air quality reading.';
+      } else {
+        txt += `  
+        The concentration of small carcinogenic particles (${item.air.measurements[0].parameter}) I'm
+          breathing in is  ${item.air.measurements[0].value} ${
+          item.air.measurements[0].unit
+        } measured from
+         ${item.air.city} at ${item.air.location} on ${item.air.measurements[0].lastUpdated}.`;
+      }
+      marker.bindPopup(txt);
+    }catch(error){
+      console.log('invalid data',item); 
     }
-    marker.bindPopup(txt);
   }
 
   // Add a line path
